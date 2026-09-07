@@ -1,5 +1,5 @@
 /* ==========================================================================
-   notes.js — the Study Notes page.
+   notes.js, the Study Notes page.
 
    Renders seven modules from GEO.data, builds the contents rail with
    scroll-spy, and wires the two interactive pieces:
@@ -31,8 +31,8 @@ GEO.pages.notes = (function () {
         return '<li><b>' + glyph + '</b><span>' + i + '</span></li>';
       }).join('') + '</ul></div>';
   }
-  function module(id, n, title, body) {
-    return '<section class="module" id="' + id + '" aria-labelledby="h-' + id + '">' +
+  function module(id, n, title, body, cls) {
+    return '<section class="module ' + (cls || '') + '" id="' + id + '" aria-labelledby="h-' + id + '">' +
       '<header class="module__head">' +
         '<span class="module__n">' + n + '</span>' +
         '<h2 class="module__t" id="h-' + id + '">' + title + '</h2>' +
@@ -48,7 +48,7 @@ GEO.pages.notes = (function () {
         '<p class="small body-dim">' + p.note + '</p></div>';
     }).join('') + '</div>' +
     '<div class="card card--pad reveal reveal--up" style="margin-top:1rem">' +
-      '<p><b>Duration:</b> ' + E.duration + ' minutes for ' + E.total + ' marks — about one minute per mark, plus reading time.</p>' +
+      '<p><b>Duration:</b> ' + E.duration + ' minutes for ' + E.total + ' marks, about one minute per mark, plus reading time.</p>' +
       '<p style="margin-top:.6rem"><b>Core writing model:</b> ' + E.model + '</p>' +
     '</div>';
   }
@@ -150,7 +150,7 @@ GEO.pages.notes = (function () {
         '<div class="hint-chips">' + P.profile.attractions.map(function (a) { return '<span class="chip">' + a + '</span>'; }).join('') + '</div></div>' +
       '</div></div>';
 
-    html += '<h3 class="h3" style="margin:2.5rem 0 .3rem">Triple Bottom Line — impacts of overtourism</h3>' +
+    html += '<h3 class="h3" style="margin:2.5rem 0 .3rem">Triple Bottom Line, impacts of overtourism</h3>' +
       '<p class="small body-dim" style="margin-bottom:1.2rem">Positives are marked <b style="color:var(--pos)">+</b>, negatives <b style="color:var(--neg)">−</b>, as well as colour-coded.</p>' +
       '<div class="tbl" data-stagger>' + P.tbl.map(function (col) {
         return '<div class="tbl__col reveal reveal--up">' +
@@ -162,7 +162,7 @@ GEO.pages.notes = (function () {
       }).join('') + '</div>';
 
     html += '<h3 class="h3" style="margin:2.5rem 0 .3rem">Management strategies</h3>' +
-      '<p class="small body-dim" style="margin-bottom:1.2rem">Effectiveness at a glance — expand any strategy for its mechanism, pros and cons.</p>' +
+      '<p class="small body-dim" style="margin-bottom:1.2rem">Effectiveness at a glance, expand any strategy for its mechanism, pros and cons.</p>' +
       '<div id="strategies">' + P.strategies.map(function (s, i) {
         return '<div class="strategy" data-strategy="' + i + '">' +
           '<button class="strategy__head" aria-expanded="false" aria-controls="strat-' + i + '">' +
@@ -214,10 +214,10 @@ GEO.pages.notes = (function () {
         var mark = res === 1 ? ' is-right' : res === 0 ? ' is-wrong' : '';
         return '<div class="node' + mark + '">' + head + body +
           (res !== undefined ? '<p class="node__hint" style="color:var(--' + (res ? 'pos' : 'neg') + ')">' +
-            (res ? 'Marked correct' : 'Marked as missed — revise this one') + '</p>' : '') + '</div>';
+            (res ? 'Marked correct' : 'Marked as missed, revise this one') + '</p>' : '') + '</div>';
       }
 
-      return '<button class="node' + (open ? ' is-open' : '') + '" data-supply-open="' + i + '" aria-expanded="' + open + '">' +
+      return '<button class="node' + (open ? ' is-open' : '') + '" data-supply-open="' + i + '" aria-expanded="' + open + '" data-tilt="4">' +
         head + (open ? '<p class="node__p">' + r.parts + '</p>' : '<p class="node__hint">Tap to reveal components</p>') +
         '</button>';
     }).join('');
@@ -234,6 +234,13 @@ GEO.pages.notes = (function () {
       }
     }
     GEO.magnetic.refresh();
+    GEO.interact.refresh();
+  }
+
+  /* Tell the globe which routes should be lit, from what is open in the DOM. */
+  function syncGlobe() {
+    var lit = Object.keys(revealed).filter(function (k) { return revealed[k]; }).map(Number);
+    GEO.scene.litCountries(lit);
   }
 
   /* ----------------------------------------------------- contents + spy */
@@ -298,13 +305,13 @@ GEO.pages.notes = (function () {
         { id: 'm-definitions', short: 'Definitions',    title: 'Core definitions',               body: definitions },
         { id: 'm-perception',  short: 'Perceptions',    title: 'Perceptions of place',           body: perception },
         { id: 'm-ict',         short: 'ICT',            title: 'ICT global interconnections',    body: ict },
-        { id: 'm-transport',   short: 'Transport',      title: 'Transport &amp; global logistics', body: transport },
+        { id: 'm-transport',   short: 'Transport',      title: 'Transport &amp; global logistics', body: transport, cls: 'module--object' },
         { id: 'm-tourism',     short: 'Tourism types',  title: 'Types of tourism',               body: tourismTypes },
         { id: 'm-paris',       short: 'Paris',          title: 'Overtourism in Paris',           body: paris }
       ];
 
       host.innerHTML = mods.map(function (m, i) {
-        return module(m.id, String(i + 1).padStart(2, '0'), m.title, m.body());
+        return module(m.id, String(i + 1).padStart(2, '0'), m.title, m.body(), m.cls);
       }).join('');
 
       buildTOC(mods);
@@ -318,6 +325,10 @@ GEO.pages.notes = (function () {
         if ((n = t.closest('[data-supply-open]'))) {
           var i = n.getAttribute('data-supply-open');
           revealed[i] = !revealed[i];
+          /* Opening a supplier spins the globe to face it and draws the
+             trade route from that country to the assembly plant. */
+          if (revealed[i]) GEO.scene.focusCountry(Number(i));
+          syncGlobe();
           renderSupply();
           return;
         }
@@ -326,7 +337,9 @@ GEO.pages.notes = (function () {
           var v = Number(n.getAttribute('data-v'));
           GEO.store.mutate(function (s) { s.supply[idx] = v; });
           revealed[idx] = false;
-          if (v === 1) GEO.scene.pulse(0.35);
+          if (v === 1) { GEO.scene.pulse(0.35); GEO.scene.shock('pos'); GEO.scene.burst(e.clientX, e.clientY, '#35d29a'); }
+          else GEO.scene.shock('neg');
+          syncGlobe();
           renderSupply();
           return;
         }
@@ -343,10 +356,13 @@ GEO.pages.notes = (function () {
           var on = n.getAttribute('data-supply-all') === '1';
           revealed = {};
           if (on) D.TRANSPORT.toyota.rows.forEach(function (_, i) { revealed[i] = true; });
+          syncGlobe();
+          if (on) GEO.scene.pulse(0.8);
           renderSupply();
         } else if (e.target.closest('[data-supply-reset]')) {
           GEO.store.mutate(function (s) { s.supply = {}; });
           revealed = {};
+          syncGlobe();
           renderSupply();
         }
       });

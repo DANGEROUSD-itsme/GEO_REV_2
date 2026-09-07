@@ -1,5 +1,5 @@
 /* ==========================================================================
-   noise.glsl.js — shared GLSL chunk: Ashima 3D simplex noise + helpers.
+   noise.glsl.js, shared GLSL chunk: Ashima 3D simplex noise + helpers.
    Prepended to any shader that needs `snoise(vec3)`.
    Kept separate so the noise implementation can be swapped (curl, worley…)
    without touching the shaders that consume it.
@@ -69,7 +69,7 @@ float snoise(vec3 v) {
   return 42.0 * dot(m * m, vec4(dot(p0, x0), dot(p1, x1), dot(p2, x2), dot(p3, x3)));
 }
 
-/* Fractal sum — three octaves is enough for a slow atmospheric field. */
+/* Fractal sum, three octaves is enough for a slow atmospheric field. */
 float fbm(vec3 p) {
   return snoise(p) * 0.55 + snoise(p * 2.3 + 14.0) * 0.30 + snoise(p * 4.7 - 7.0) * 0.15;
 }

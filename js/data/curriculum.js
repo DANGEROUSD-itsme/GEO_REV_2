@@ -1,7 +1,7 @@
 /* ==========================================================================
-   curriculum.js — syllabus content: definitions, perception, ICT, transport, tourism, Paris.
+   curriculum.js: syllabus content: definitions, perception, ICT, transport, tourism, Paris.
    Ported verbatim from the verified curriculum content. Every value that the
-   UI shows lives here — the pages render from this data and hold no copy of
+   UI shows lives here. The pages render from this data and hold no copy of
    their own, so a fact is corrected in exactly one place.
    ========================================================================== */
 window.GEO = window.GEO || {};
@@ -11,11 +11,11 @@ GEO.data.EXAM = {
   duration: 45,
   total: 37,
   parts: [
-    { id:'A', name:'Part A — Multiple Choice',            marks:12, color:'#837ffb', note:'12 questions × 1 mark' },
-    { id:'B', name:'Part B — Short Answer & Data Analysis', marks:13, color:'#43c78f', note:'3 questions (2 + 4 + 7)' },
-    { id:'C', name:'Part C — Extended Response',           marks:12, color:'#e0a044', note:'1 question (6 + 4 + 2)' }
+    { id:'A', name:'Part A: Multiple Choice',            marks:12, color:'#837ffb', note:'12 questions × 1 mark' },
+    { id:'B', name:'Part B: Short Answer & Data Analysis', marks:13, color:'#43c78f', note:'3 questions (2 + 4 + 7)' },
+    { id:'C', name:'Part C: Extended Response',           marks:12, color:'#e0a044', note:'1 question (6 + 4 + 2)' }
   ],
-  model: 'T.E.E.T — Topic sentence, Explanation, Example, Tie-back'
+  model: 'T.E.E.T: Topic sentence, Explanation, Example, Tie-back'
 };
 
 /* --------------------------------------------------- 2. CORE DEFINITIONS */
@@ -28,7 +28,7 @@ GEO.data.DEFINITIONS = [
   { term:'Overtourism', icon:'users',
     text:'The phenomenon whereby certain places of interest are visited by excessive numbers of tourists, causing undesirable effects and negative impacts on that place’s environment, local people, culture and infrastructure.' },
   { term:'Supply Chain', icon:'workflow',
-    text:'A complex system of organisations, people, activities, information and resources involved in moving a product or service from supplier to customer — transforming natural resources, raw materials and components into a finished product delivered to the end customer.' },
+    text:'A complex system of organisations, people, activities, information and resources involved in moving a product or service from supplier to customer, transforming natural resources, raw materials and components into a finished product delivered to the end customer.' },
   { term:'Logistics', icon:'truck',
     text:'The detailed management of the flow of things between the point of origin and the point of consumption to meet customer or corporate requirements. It covers physical goods (food, materials, equipment) and abstract assets (time, information), integrating transport, warehousing, inventory and packaging.' }
 ];
@@ -41,36 +41,36 @@ GEO.data.PERCEPTION = {
   criteria: [
     { key:'spiritual', name:'Spiritual', icon:'sparkles',
       desc:'Deep sacred, emotional or belief-based connections to a place.',
-      caseTitle:'Case study — Murujuga (Burrup Peninsula), Pilbara WA',
+      caseTitle:'Case study: Murujuga (Burrup Peninsula), Pilbara WA',
       caseText:'Indigenous Australians hold a profound spiritual connection to Murujuga, home to sacred ancient rock art (petroglyphs) of deep cultural and spiritual significance, tying present-day custodians to ancestral Country.' },
     { key:'economic', name:'Economic', icon:'banknote',
       desc:'Connections driven by employment, income, trade or resource extraction.',
-      caseTitle:'Case study — the opposing lens on the same place',
-      caseText:'Resource and mining corporations view the Burrup Peninsula as a major industrial hub for natural gas processing and mining exports — the same landscape valued for output, jobs and export revenue rather than sacredness.' },
+      caseTitle:'Case study: the opposing lens on the same place',
+      caseText:'Resource and mining corporations view the Burrup Peninsula as a major industrial hub for natural gas processing and mining exports, valuing the same landscape for output, jobs and export revenue rather than for its sacredness.' },
     { key:'cultural', name:'Cultural', icon:'drama',
       desc:'Social connections based on shared community history, traditions, language and cultural practices.',
       caseTitle:'Applying it',
-      caseText:'Communities connect to place through festivals, language, food, art and shared customs practised in that location — perception is shaped by the culture a person belongs to.' },
+      caseText:'Communities connect to place through festivals, language, food, art and shared customs practised in that location, perception is shaped by the culture a person belongs to.' },
     { key:'historical', name:'Historical', icon:'landmark',
       desc:'Connection established through past events, heritage buildings or ancestral lineage.',
       caseTitle:'Applying it',
       caseText:'A place can be valued because something significant happened there, because heritage architecture survives, or because a person’s ancestors lived there.' }
   ],
-  dualNaming: 'Dual naming is a tool used to recognise First Nations connections to place — for example Mandurah is also named Mandjoogoordap.',
+  dualNaming: 'Dual naming is a tool used to recognise First Nations connections to place, for example Mandurah is also named Mandjoogoordap.',
   twoLenses: {
     place: 'Burrup Peninsula / Murujuga, Pilbara WA',
     left:  { label:'Spiritual lens', who:'Indigenous Australians (Traditional Custodians)', icon:'sparkles',
-             points:['Sacred ancient rock art with deep spiritual significance','Place is inseparable from identity, law and ancestry','Value is intrinsic — it cannot be substituted or relocated','Industrial emissions and development are seen as a threat to sacred heritage'] },
+             points:['Sacred ancient rock art with deep spiritual significance','Place is inseparable from identity, law and ancestry','Value is intrinsic: it cannot be substituted or relocated','Industrial emissions and development are seen as a threat to sacred heritage'] },
     right: { label:'Economic lens', who:'Resource and mining corporations', icon:'factory',
              points:['Major industrial hub for natural gas processing','Export node for mining products feeding global supply chains','Value is measured in output, employment and export revenue','Development is framed as national and regional economic benefit'] },
-    takeaway: 'One place, two legitimate but competing perceptions. Contested perspectives like this are a classic exam angle — always name WHO holds the perception and WHY their background produces it.'
+    takeaway: 'One place, two legitimate but competing perceptions. Contested perspectives like this are a classic exam angle, always name WHO holds the perception and WHY their background produces it.'
   }
 };
 
 /* ------------------------------------------------------ 4. ICT CASE STUDIES */
 
 GEO.data.ICT = {
-  intro: 'The internet and personal devices interconnect people globally — linking them to goods, services, information and to other people, almost instantly and across enormous distances. ICT collapses the friction of distance so that isolation no longer means disconnection.',
+  intro: 'The internet and personal devices interconnect people globally, linking them to goods, services, information and to other people, almost instantly and across enormous distances. ICT collapses the friction of distance so that isolation no longer means disconnection.',
   cases: [
     { name:'School of the Air', icon:'radio',
       desc:'Satellite and radio networks connect geographically isolated students across remote Australia to teachers, classrooms and schooling.',
@@ -80,10 +80,10 @@ GEO.data.ICT = {
       matters:'Why it matters: interconnection through ICT plus transport turns an isolated location into one with access to specialist healthcare.' },
     { name:'Offshore call centres', icon:'headset',
       desc:'Western corporations outsource customer service and IT support to business-processing hubs in India and the Philippines.',
-      matters:'Why it matters: ICT lets a service be produced in one country and consumed in another — an interconnection of labour markets, not just goods.' },
+      matters:'Why it matters: ICT lets a service be produced in one country and consumed in another, an interconnection of labour markets, not just goods.' },
     { name:'iPhone sourcing', icon:'smartphone',
       desc:'A single phone contains 300+ components. Materials such as gold, silicon, cobalt, silver and rare-earth elements are mined globally across complex international networks.',
-      matters:'Why it matters: an everyday device is physical proof of a worldwide supply chain — one product interconnects dozens of countries.' }
+      matters:'Why it matters: an everyday device is physical proof of a worldwide supply chain, one product interconnects dozens of countries.' }
   ]
 };
 
@@ -92,7 +92,7 @@ GEO.data.ICT = {
 GEO.data.TRANSPORT = {
   modes: [
     { name:'Shipping', icon:'ship', stat:'~90%',
-      desc:'Around 90% of all international physical trade in goods moves by sea — bulk oil, gas and grain plus consumer goods in containers.',
+      desc:'Around 90% of all international physical trade in goods moves by sea, bulk oil, gas and grain plus consumer goods in containers.',
       extra:'Valued at over $18 trillion annually.' },
     { name:'Air transport', icon:'plane-takeoff', stat:'<24 hrs',
       desc:'Air travel has reshaped the world over the last 100 years, moving high-value goods and millions of international tourists across the globe in under 24 hours.',
@@ -138,7 +138,7 @@ GEO.data.TRANSPORT = {
 /* ---------------------------------------------------- 6. TYPES OF TOURISM */
 
 GEO.data.TOURISM_TYPES = [
-  { name:'Recreational', icon:'umbrella', desc:'Travel for leisure, relaxation and holidaying — beaches, resorts and rest.' },
+  { name:'Recreational', icon:'umbrella', desc:'Travel for leisure, relaxation and holidaying: beaches, resorts and rest.' },
   { name:'Cultural',     icon:'drama',    desc:'Travel to explore different cultures, lifestyles, art or language.' },
   { name:'Historical',   icon:'landmark', desc:'Touring historic ruins, museums, heritage sites and architecture.' },
   { name:'Event / Ecotourism', icon:'leaf', desc:'Travel for sporting or cultural events; or travel to natural, undisturbed areas designed to conserve the environment and support local communities.' }
@@ -150,18 +150,18 @@ GEO.data.PARIS = {
   profile: {
     arrivals: '~50 million tourist arrivals annually',
     attractions: ['Eiffel Tower','Louvre','Notre-Dame','Arc de Triomphe','Sacré-Cœur','Montmartre'],
-    infrastructure: 'High-density public transport infrastructure — Metro, buses and trains.'
+    infrastructure: 'High-density public transport infrastructure: Metro, buses and trains.'
   },
   tbl: [
     { pillar:'Economic', icon:'banknote',
       positives:[
-        'Record tourist revenue of ~€24 billion in 2025 — an 8% increase on 2019.',
+        'Record tourist revenue of ~€24 billion in 2025, an 8% increase on 2019.',
         'International visitors alone contributed €16 billion.',
         'Employs 290,000+ people across the Paris region.'
       ],
       negatives:[
         'Over-dependency on a volatile sector that collapses in crises.',
-        'Severe economic leakage — major tourist spend flows to international hotel chains, global tour operators and Airbnb, bypassing local small businesses.'
+        'Severe economic leakage: major tourist spend flows to international hotel chains, global tour operators and Airbnb, bypassing local small businesses.'
       ] },
     { pillar:'Social', icon:'users',
       positives:[
@@ -171,14 +171,14 @@ GEO.data.PARIS = {
       negatives:[
         'Housing supply squeezed by ~75,000 short-term holiday rentals (e.g. Airbnb), pricing residents out.',
         'Mayor Anne Hidalgo and Deputy Ian Brossat warn of Paris turning into an “open-air museum” serving only tourists.',
-        '“Disneyfication” of Montmartre — changing local character, residential conflict over crowds and noise, and the loss of everyday services for residents.'
+        '“Disneyfication” of Montmartre: changing local character, residential conflict over crowds and noise, and the loss of everyday services for residents.'
       ] },
     { pillar:'Environmental', icon:'leaf',
       positives:[
         'Funding generated by tourism can support heritage conservation works.'
       ],
       negatives:[
-        'Physical wear and tear on landmarks — Sacré-Cœur, Notre-Dame and the Louvre.',
+        'Physical wear and tear on landmarks: Sacré-Cœur, Notre-Dame and the Louvre.',
         'Waste and litter accumulation in high-traffic districts.',
         'Heavy traffic congestion, noise pollution and a high carbon footprint from air and road transport.'
       ],
@@ -192,7 +192,7 @@ GEO.data.PARIS = {
       rating:'Moderately Effective', level:2 },
     { id:'airbnb', name:'Airbnb Short-Term Rental Regulations', icon:'home',
       mechanism:'Primary-residence rentals are capped at 120 days per year (with a proposed drop to 90 days in hot-spots), centralised digital registration is required, and fines range from €15,000 to €100,000.',
-      pros:['Slows the conversion of housing into tourist accommodation','Encourages compliance — court-issued fines fell from €3.5 million in 2021 to €535k in the first 7 months of 2023, indicating fewer violations'],
+      pros:['Slows the conversion of housing into tourist accommodation','Encourages compliance: court-issued fines fell from €3.5 million in 2021 to €535k in the first 7 months of 2023, indicating fewer violations'],
       cons:['The housing shortage and high rent prices remain','Enforcement is difficult and imperfect across tens of thousands of listings'],
       rating:'Moderately Effective', level:2 },
     { id:'dispersal', name:'Active Tourist Dispersal (Proposed Strategy)', icon:'route',
@@ -204,3 +204,21 @@ GEO.data.PARIS = {
   ]
 };
 /* ------------------------------------------------ 8. FLASHCARD SUB-DECKS */
+
+/* Approximate centroids for each supplier in the Toyota chain, in row order,
+   plus the assembly plant (Toyota City, Japan). Used by the 3D globe on the
+   notes page to place markers and draw the supply arcs. [lat, lon] */
+GEO.data.TOYOTA_GEO = [
+  [50.5,   4.5],   /* Belgium      */  [52.2,   5.3],   /* Netherlands  */
+  [56.0,  10.0],   /* Denmark      */  [61.0,   8.5],   /* Norway       */
+  [62.0,  15.0],   /* Sweden       */  [51.0,  10.5],   /* Germany      */
+  [46.8,   8.2],   /* Switzerland  */  [47.5,  14.5],   /* Austria      */
+  [42.8,  12.8],   /* Italy        */  [54.0,  -2.5],   /* Britain      */
+  [46.6,   2.4],   /* France       */  [40.4,  -3.7],   /* Spain        */
+  [-29.0, 24.0],   /* South Africa */  [-20.3, 57.5],   /* Mauritius    */
+  [24.5,  47.0],   /* Middle East  */  [21.0,  78.0],   /* India        */
+  [-2.5, 118.0],   /* Indonesia    */  [23.6,-102.5],   /* Mexico       */
+  [-10.0,-52.0],   /* Brazil       */  [39.8, -98.6],   /* USA          */
+  [56.0,-106.0]    /* Canada       */
+];
+GEO.data.TOYOTA_ASSEMBLY = [35.1, 137.2];   /* Toyota City, Japan */

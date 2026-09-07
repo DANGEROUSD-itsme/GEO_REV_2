@@ -1,14 +1,14 @@
 /* ==========================================================================
-   reveal.js — scroll-tied reveals, all through GSAP + ScrollTrigger.
+   reveal.js: scroll-tied reveals, all through GSAP + ScrollTrigger.
 
    Two mechanisms:
      [data-split]  headings are split into measured LINES, each clipped by an
-                   overflow box and slid up — not an opacity fade.
+                   overflow box and slid up, not an opacity fade.
      .reveal       generic blocks fade/rise on entry, with optional stagger via
                    [data-stagger] on a parent.
      [data-parallax] elements drift at a fraction of scroll speed.
 
-   Degradation: without GSAP nothing is hidden — an IntersectionObserver adds
+   Degradation: without GSAP nothing is hidden, an IntersectionObserver adds
    the visible state so the page still reads correctly. With reduced motion,
    everything is shown immediately.
    ========================================================================== */
@@ -19,7 +19,7 @@ GEO.reveal = (function () {
 
   /* ------------------------------------------------------- line splitting */
   function splitIntoLines(el) {
-    /* Only split plain-text nodes — anything with markup keeps its structure. */
+    /* Only split plain-text nodes, anything with markup keeps its structure. */
     if (el.querySelector('*') || !el.textContent.trim()) return null;
 
     var original = el.getAttribute('data-original-text') || el.textContent;
@@ -28,7 +28,7 @@ GEO.reveal = (function () {
     var words = original.trim().split(/\s+/);
     el.innerHTML = words.map(function (w) { return '<span class="w">' + w + '</span>'; }).join(' ');
 
-    /* Group words by their vertical offset — that is the real line break as
+    /* Group words by their vertical offset: that is the real line break as
        the browser laid it out, at this width, with this font. */
     var spans = Array.prototype.slice.call(el.querySelectorAll('.w'));
     var lines = [];
@@ -97,7 +97,15 @@ GEO.reveal = (function () {
       if (!kids.length) return;
       gsap.to(kids, {
         opacity: 1, y: 0, duration: 1, ease: 'expo.out', stagger: 0.08,
-        scrollTrigger: { trigger: group, start: 'top 85%', once: true }
+        scrollTrigger: { trigger: group, start: 'top 85%', once: true },
+        onComplete: function () {
+          /* Hand `transform` back to the interaction layer once the reveal is
+             done, otherwise GSAP's inline transform blocks the pointer tilt. */
+          this.targets().forEach(function (t) {
+            t.classList.add('is-revealed');
+            t.style.transform = '';
+          });
+        }
       });
     });
 
@@ -105,7 +113,37 @@ GEO.reveal = (function () {
       if (el.closest('[data-stagger]')) return;
       gsap.to(el, {
         opacity: 1, y: 0, duration: 1.1, ease: 'expo.out',
-        scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+        scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+        onComplete: function () {
+          /* Hand `transform` back to the interaction layer once the reveal is
+             done, otherwise GSAP's inline transform blocks the pointer tilt. */
+          this.targets().forEach(function (t) {
+            t.classList.add('is-revealed');
+            t.style.transform = '';
+          });
+        }
+      });
+    });
+
+    /* ---- ledes reveal word by word, softer than the heading lines ---- */
+    document.querySelectorAll('[data-words]').forEach(function (el) {
+      if (el.querySelector('.w')) return;
+      var text = el.textContent.trim();
+      el.innerHTML = text.split(/\s+/).map(function (w) { return '<span class="w">' + w + '</span>'; }).join(' ');
+      var ws = el.querySelectorAll('.w');
+      gsap.set(ws, { opacity: 0.12 });
+      gsap.to(ws, {
+        opacity: 1, duration: 0.5, ease: 'none', stagger: 0.02,
+        scrollTrigger: { trigger: el, start: 'top 82%', end: 'bottom 62%', scrub: 0.5 }
+      });
+    });
+
+    /* ---- rules draw themselves in ---- */
+    document.querySelectorAll('.rule-draw, .rule').forEach(function (el) {
+      el.classList.add('rule-draw');
+      gsap.to(el, {
+        scaleX: 1, duration: 1.2, ease: 'expo.out',
+        scrollTrigger: { trigger: el, start: 'top 92%', once: true }
       });
     });
 

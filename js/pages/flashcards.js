@@ -1,5 +1,5 @@
 /* ==========================================================================
-   flashcards.js — deck picker + 3D flip card.
+   flashcards.js, deck picker + 3D flip card.
 
    Mouse, touch and keyboard all drive the same state: Space/Enter flips,
    arrows move, and the mark buttons write straight to the persistent store so
@@ -77,7 +77,7 @@ GEO.pages.flashcards = (function () {
           (status === 'known' ? 'Know it' : 'Still learning') + '</span>' : '') +
         '<span class="meter"><span class="meter__fill" style="width:' + ((pos + 1) / idx.length * 100) + '%"></span></span>' +
       '</div>' +
-      '<div class="flip" id="flip" tabindex="0" role="button" aria-pressed="false" data-cursor-text="Flip"' +
+      '<div class="flip" id="flip" tabindex="0" role="button" aria-pressed="false" data-cursor-text="Flip" data-tilt="5"' +
         ' aria-label="Flashcard. Activate to flip between question and answer.">' +
         '<div class="flip__inner">' +
           '<div class="flip__face">' +
@@ -101,10 +101,13 @@ GEO.pages.flashcards = (function () {
 
     fitCard();
     GEO.magnetic.refresh();
+    GEO.interact.refresh();
+    /* The field brightens with how much of this deck is mastered. */
+    GEO.scene.setProgress(knownIn(d) / d.cards.length);
   }
 
   /* The two faces are absolutely positioned, so the card has to be told how
-     tall it is — measured from whichever face is longer. */
+     tall it is, measured from whichever face is longer. */
   function fitCard() {
     var inner = document.querySelector('.flip__inner');
     if (!inner) return;
@@ -125,16 +128,22 @@ GEO.pages.flashcards = (function () {
 
   function move(step) { pos += step; renderCard(); }
 
-  function mark(status) {
+  function mark(status, e) {
     var d = deck(), idx = visible();
     if (!idx.length) return;
     var cardKey = d.id + ':' + idx[pos];
 
     GEO.store.mutate(function (s) { s.cards[cardKey] = status; });
-    if (status === 'known') GEO.scene.pulse(0.4);
+    if (status === 'known') {
+      GEO.scene.pulse(0.55);
+      GEO.scene.shock('pos');
+      if (e) GEO.scene.burst(e.clientX, e.clientY, '#35d29a');
+    } else {
+      GEO.scene.shock('warn');
+    }
 
     /* When filtering to "still learning", a card marked known leaves the
-       filtered set — so stay put rather than skipping the next card. */
+       filtered set, so stay put rather than skipping the next card. */
     if (!(filterLearning && status === 'known')) pos++;
     renderDecks();
     renderCard();
@@ -161,7 +170,7 @@ GEO.pages.flashcards = (function () {
       document.getElementById('card-stage').addEventListener('click', function (e) {
         var n;
         if ((n = e.target.closest('[data-fc]'))) { move(n.getAttribute('data-fc') === 'next' ? 1 : -1); return; }
-        if ((n = e.target.closest('[data-mark]'))) { mark(n.getAttribute('data-mark')); return; }
+        if ((n = e.target.closest('[data-mark]'))) { mark(n.getAttribute('data-mark'), e); return; }
         if (e.target.closest('#flip')) flip();
       });
 

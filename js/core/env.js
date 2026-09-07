@@ -1,5 +1,5 @@
 /* ==========================================================================
-   env.js — capability detection, the single shared rAF ticker, and scroll state.
+   env.js: capability detection, the single shared rAF ticker, and scroll state.
 
    Everything else in the site reads from here rather than making its own
    decisions, so "reduced motion", "no WebGL", "low-power device" and "tab
@@ -28,7 +28,7 @@ GEO.env = (function () {
   }
 
   /* Performance tier decides particle counts, geometry detail, DPR cap and
-     antialiasing. Deliberately conservative — a smooth low tier beats a
+     antialiasing. Deliberately conservative: a smooth low tier beats a
      stuttering high one. */
   function detectTier() {
     var mem = navigator.deviceMemory || 4;
@@ -46,7 +46,7 @@ GEO.env = (function () {
     tier: detectTier(),
     hidden: document.hidden,
 
-    /* Cap device pixel ratio — full DPR on a 3x phone is the single biggest
+    /* Cap device pixel ratio, full DPR on a 3x phone is the single biggest
        cause of dropped frames in a fullscreen shader. */
     dpr: function () {
       var cap = this.tier === 'high' ? 2 : this.tier === 'medium' ? 1.6 : 1.25;
@@ -78,7 +78,7 @@ GEO.env = (function () {
   document.documentElement.classList.toggle('reduced-motion', env.reducedMotion);
 
   /* ------------------------------------------------------------ visibility
-     Rendering is fully paused while the tab is hidden — no wasted GPU. */
+     Rendering is fully paused while the tab is hidden, no wasted GPU. */
   document.addEventListener('visibilitychange', function () {
     env.hidden = document.hidden;
     emit('visibility', !document.hidden);

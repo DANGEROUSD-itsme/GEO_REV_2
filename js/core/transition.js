@@ -1,11 +1,11 @@
 /* ==========================================================================
-   transition.js — shader-driven page transitions.
+   transition.js, shader-driven page transitions.
 
    This is a multi-page site, so a navigation is: play the wipe OUT, then let
    the browser navigate; on the next page, play the wipe IN from the same
    direction. Travel direction is carried across the navigation in
    sessionStorage, so moving "forward" through the nav sweeps one way and
-   moving "back" sweeps the other — the transition communicates direction.
+   moving "back" sweeps the other, the transition communicates direction.
 
    Falls back cleanly: no WebGL, no THREE, or reduced motion => a plain cut
    (navigate immediately, reveal instantly). Content is never gated on this.
@@ -111,10 +111,20 @@ GEO.transition = (function () {
       draw();
       unboot();
 
+      /* The incoming page settles up into place as the wipe clears. */
+      if (window.gsap) {
+        var blocks = document.querySelectorAll('.shell > section');
+        gsap.fromTo(blocks,
+          { y: dir > 0 ? 40 : -40, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1.1, ease: 'expo.out', stagger: 0.06, delay: 0.25, clearProps: 'transform,opacity' });
+      }
+
       return play(1, dir, 950).then(hide);
     },
 
-    /* Cover the page, remember the direction, then navigate. */
+    /* Cover the page, remember the direction, then navigate. The content
+       itself lifts away first, so the page leaves rather than just being
+       painted over. */
     go: function (href, dir) {
       if (navigating) return;
       navigating = true;
@@ -122,6 +132,17 @@ GEO.transition = (function () {
       if (!api.enabled()) { window.location.href = href; return; }
 
       try { sessionStorage.setItem(DIR_KEY, String(dir || 1)); } catch (e) {}
+
+      if (window.gsap) {
+        var blocks = document.querySelectorAll('.shell > section, .footer');
+        gsap.to(blocks, {
+          y: (dir || 1) > 0 ? -46 : 46,
+          opacity: 0,
+          duration: 0.5,
+          ease: 'power2.in',
+          stagger: { each: 0.045, from: (dir || 1) > 0 ? 'start' : 'end' }
+        });
+      }
 
       play(0, dir || 1, 760).then(function () {
         window.location.href = href;

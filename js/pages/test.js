@@ -1,5 +1,5 @@
 /* ==========================================================================
-   test.js — the 37-mark mock paper.
+   test.js, the 37-mark mock paper.
 
    A four-state machine (Part A → Part B → Part C → Results) rather than a
    show/hide toggle: each transition animates, updates the step rail, moves
@@ -48,7 +48,7 @@ GEO.pages.test = (function () {
         '</div>' +
         '<div class="meter"><div class="meter__fill" id="test-progress"></div></div>' +
         '<div class="note note--neg" id="timeup" style="margin-top:.8rem;display:none">' +
-          '<p>Time is up. Parts A and B are submitted and their answers revealed — Part C stays open so you can finish the extended response.</p></div>' +
+          '<p>Time is up. Parts A and B are submitted and their answers revealed: Part C stays open so you can finish the extended response.</p></div>' +
       '</div>' +
 
       '<nav class="steps-nav" id="steps" aria-label="Test sections">' +
@@ -73,7 +73,7 @@ GEO.pages.test = (function () {
   /* ---------------------------------------------------------- part A */
   function partA() {
     return stepHead('a', 'Part A', 'Multiple choice', '12 marks',
-      'One answer per question. Feedback appears immediately and your answer locks in — just as it would once you had written it on the paper.') +
+      'One answer per question. Feedback appears immediately and your answer locks in: just as it would once you had written it on the paper.') +
       '<div id="qa">' + A.map(qaHTML).join('') + '</div>' +
       '<div class="card-actions" style="margin-top:2rem">' +
         '<button class="btn btn--primary" data-go="b" data-magnetic="0.3">Continue to Part B →</button></div>';
@@ -112,7 +112,7 @@ GEO.pages.test = (function () {
   /* ---------------------------------------------------------- part B */
   function partB() {
     return stepHead('b', 'Part B', 'Short answer &amp; data analysis', '13 marks',
-      'These are <b>self-marked</b>. Write your answer first, then reveal the rubric and the model answer and award yourself marks honestly — the rubric is the same one a marker would use.') +
+      'These are <b>self-marked</b>. Write your answer first, then reveal the rubric and the model answer and award yourself marks honestly: the rubric is the same one a marker would use.') +
       '<div id="qb">' + B.map(qbHTML).join('') + '</div>' +
       '<div class="card-actions" style="margin-top:2rem">' +
         '<button class="btn btn--sm btn--ghost" data-go="a">← Back to Part A</button>' +
@@ -138,7 +138,7 @@ GEO.pages.test = (function () {
 
   function rubricHTML(q) {
     return '<div class="rubric">' +
-      '<div class="note note--accent"><div><p class="eyebrow eyebrow--accent">Marking rubric — ' + q.marks + ' marks</p>' +
+      '<div class="note note--accent"><div><p class="eyebrow eyebrow--accent">Marking rubric: ' + q.marks + ' marks</p>' +
         '<ul class="list" style="margin-top:.6rem">' + q.rubric.map(function (r) { return '<li><span>' + r + '</span></li>'; }).join('') + '</ul></div></div>' +
       '<div class="note note--pos"><div><p class="eyebrow" style="color:var(--pos)">Model answer</p>' +
         q.model.split('\n\n').map(function (p) { return '<p class="small" style="margin-top:.6rem">' + p + '</p>'; }).join('') + '</div></div>' +
@@ -183,10 +183,10 @@ GEO.pages.test = (function () {
 
   function exemplarHTML() {
     return '<div class="card card--pad exemplar">' +
-      '<p class="eyebrow" style="color:var(--warn)">Perfect-score exemplar — 12 / 12</p>' +
+      '<p class="eyebrow" style="color:var(--warn)">Perfect-score exemplar, 12 / 12</p>' +
       '<div class="exemplar__legend" style="margin-top:.8rem">' +
         Object.keys(TAGNAME).map(function (k) {
-          return '<span class="chip tag tag--' + k + '">' + k.charAt(0) + ' — ' + TAGNAME[k] + '</span>';
+          return '<span class="chip tag tag--' + k + '">' + k.charAt(0) + ', ' + TAGNAME[k] + '</span>';
         }).join('') + '</div>' +
       C.exemplar.map(function (p) {
         return '<div style="margin-bottom:1.6rem">' +
@@ -208,13 +208,13 @@ GEO.pages.test = (function () {
     var pct = Math.round(s.total / EXAM.total * 100);
 
     var parts = [
-      { label: 'Part A — Multiple choice', got: s.a, max: 12,
+      { label: 'Part A: Multiple choice', got: s.a, max: 12,
         nudge: 'Re-read the definitions, connection criteria and ICT case studies in the notes, then run the “Core Definitions” and “ICT Case Studies” decks.',
         link: 'flashcards.html' },
-      { label: 'Part B — Short answer', got: s.b, max: 13,
-        nudge: 'Go back to Transport &amp; global logistics — the Toyota supply chain and the Figure 1 trade-flow reasoning — then drill the “Car Supply Chain” deck.',
+      { label: 'Part B: Short answer', got: s.b, max: 13,
+        nudge: 'Go back to Transport &amp; global logistics, the Toyota supply chain and the Figure 1 trade-flow reasoning, then drill the “Car Supply Chain” deck.',
         link: 'notes.html#m-transport' },
-      { label: 'Part C — Extended response', got: s.c, max: 12,
+      { label: 'Part C: Extended response', got: s.c, max: 12,
         nudge: 'Work through the Paris case study and the two Paris decks, then build all three paragraphs in the TEET builder.',
         link: 'teet.html' }
     ];
@@ -249,7 +249,13 @@ GEO.pages.test = (function () {
   function setStep(next, focus) {
     if (next === step) return;
     step = next;
-    if (next === 'results') renderResults();
+    if (next === 'results') {
+      renderResults();
+      var sc = score();
+      GEO.scene.setProgress(sc.total / EXAM.total);
+      GEO.scene.pulse(1.0);
+      GEO.scene.shock(sc.total / EXAM.total >= 0.5 ? 'pos' : 'warn');
+    }
 
     var nodes = document.querySelectorAll('.step');
     nodes.forEach(function (n) { n.classList.toggle('is-active', n.getAttribute('data-step') === next); });
@@ -266,6 +272,7 @@ GEO.pages.test = (function () {
     }
     GEO.scene.setMix(next === 'results' ? 1 : 0.55);
     GEO.magnetic.refresh();
+    GEO.interact.refresh();
 
     /* Move focus to the new section so keyboard and screen-reader users are
        taken with the transition rather than left behind. */
@@ -322,6 +329,10 @@ GEO.pages.test = (function () {
 
   function updateBar() {
     var s = score();
+    /* The three rings in the scene are the three parts of the paper. */
+    GEO.scene.charge(0, s.answered / A.length);
+    GEO.scene.charge(1, s.b / 13);
+    GEO.scene.charge(2, s.c / 12);
     var tally = document.getElementById('tally');
     var sub = document.getElementById('subtally');
     var bar = document.getElementById('test-progress');
@@ -341,6 +352,7 @@ GEO.pages.test = (function () {
       locked = remaining <= 0;
 
       var root = document.getElementById('test-root');
+      root.classList.add('object-room');
       root.innerHTML = shell();
 
       document.querySelector('.step[data-step="a"]').classList.add('is-active');
@@ -367,7 +379,14 @@ GEO.pages.test = (function () {
           if (T().answers[i] !== undefined) return;
           var chosen = Number(n.getAttribute('data-o'));
           GEO.store.mutate(function (s) { s.test.answers[i] = chosen; });
-          if (chosen === A[i].answer) GEO.scene.pulse(0.4);
+          /* Right and wrong each get their own shockwave through the field. */
+          if (chosen === A[i].answer) {
+            GEO.scene.pulse(0.5);
+            GEO.scene.shock('pos');
+            GEO.scene.burst(e.clientX, e.clientY, '#35d29a');
+          } else {
+            GEO.scene.shock('neg');
+          }
           var host = document.getElementById('qa-' + i);
           host.outerHTML = qaHTML(A[i], i);
           updateBar();

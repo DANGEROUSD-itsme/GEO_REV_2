@@ -1,5 +1,5 @@
 /* ==========================================================================
-   counters.js — statistics count up when they scroll into view.
+   counters.js, statistics count up when they scroll into view.
 
    Markup:
      <span data-count-to="24" data-prefix="€" data-suffix="B" data-decimals="0">€24B</span>
@@ -40,8 +40,8 @@ GEO.counters = (function () {
       if (isNaN(target)) return;
 
       /* The authored final value stays on screen until the moment the count
-         actually starts. If the trigger never fires — refresh timing, an odd
-         layout, a ScrollTrigger failure — the correct number is still shown
+         actually starts. If the trigger never fires: refresh timing, an odd
+         layout, a ScrollTrigger failure, the correct number is still shown
          rather than a stranded zero. */
       ScrollTrigger.create({
         trigger: node,

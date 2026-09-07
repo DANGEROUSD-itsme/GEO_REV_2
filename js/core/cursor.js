@@ -1,5 +1,5 @@
 /* ==========================================================================
-   cursor.js — the persistent custom cursor.
+   cursor.js, the persistent custom cursor.
 
    A hard dot that tracks the pointer almost exactly, and a ring that eases
    toward it at a slower rate, so the two separate under acceleration and
@@ -33,7 +33,7 @@ GEO.cursor = (function () {
     document.body.appendChild(dot);
   }
 
-  /* What counts as interactive — links, controls, and anything opting in. */
+  /* What counts as interactive, links, controls, and anything opting in. */
   var SEL = 'a[href], button, input, select, textarea, summary, [data-cursor], [tabindex]:not([tabindex="-1"])';
 
   function onOver(e) {
@@ -108,7 +108,7 @@ GEO.cursor = (function () {
     init: function () {
       if (shouldRun()) enable();
       /* React live if the user changes their motion preference or plugs in a
-         mouse — no reload needed. */
+         mouse, no reload needed. */
       GEO.env.on('motionchange', function () { shouldRun() ? enable() : disable(); });
       GEO.env.on('pointerchange', function () { shouldRun() ? enable() : disable(); });
     },

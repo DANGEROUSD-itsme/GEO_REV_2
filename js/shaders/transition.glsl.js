@@ -1,10 +1,10 @@
 /* ==========================================================================
-   transition.glsl.js — the page-transition wipe.
+   transition.glsl.js, the page-transition wipe.
 
    A directional, noise-warped front rather than a fade: the mask is a
    smoothstep along `uDir`, displaced by simplex noise so the leading edge
    tears rather than travelling as a straight line. Direction communicates
-   travel — forward navigations sweep up, backward sweeps down.
+   travel: forward navigations sweep up, backward sweeps down.
 
      uProgress  0..1 front position
      uInvert    0 = cover the page, 1 = uncover it
@@ -36,7 +36,7 @@ GEO.shaders.transition = {
     void main() {
       vec2 uv = vUv;
 
-      /* Warp field — large, slow cells so the tear reads as one gesture. */
+      /* Warp field, large, slow cells so the tear reads as one gesture. */
       float n = fbm(vec3(uv * vec2(uAspect, 1.0) * 2.4, uTime * 0.35));
 
       /* Distance along the sweep direction, 0 at the trailing corner. */

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   base.css — design tokens, reset, typography, layout shell, overlays.
+   base.css: design tokens, reset, typography, layout shell, overlays.
    The site is dark, high-contrast, editorial. Two accents only:
      --accent  (indigo)  = interactivity, links, active state, glow
      --pos / --neg       = semantic only (correct / incorrect, positive / negative)
@@ -75,7 +75,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Focus is never removed — only restyled. Everything here is keyboard-usable. */
+/* Focus is never removed, only restyled. Everything here is keyboard-usable. */
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
@@ -138,7 +138,7 @@ h1, h2, h3 { font-weight: 400; line-height: 1.02; letter-spacing: -0.02em; }
 }
 #fx-canvas.is-active { opacity: 1; visibility: visible; }
 
-/* Static fallback backdrop — always painted, so a failed WebGL context or a
+/* Static fallback backdrop, always painted, so a failed WebGL context or a
    blocked CDN still leaves a designed page rather than a black void. */
 .backdrop {
   position: fixed; inset: 0; z-index: -1; pointer-events: none;
@@ -292,11 +292,16 @@ body.cursor-active input, body.cursor-active textarea, body.cursor-active select
    reveal.js adds .js-ready to <html>; only then do we hide pre-reveal state. */
 .js-ready .reveal { opacity: 0; }
 .js-ready .reveal--up { transform: translateY(24px); }
+/* Once revealed, the element keeps its final state from this rule rather
+   than from an inline transform, which frees the pointer-tilt layer to own
+   `transform` from then on. */
+.js-ready .reveal.is-revealed { opacity: 1; transform: none; }
+
 @media (prefers-reduced-motion: reduce) {
   .js-ready .reveal { opacity: 1; transform: none; }
 }
 
-/* Boot curtain — the class is only ever added by an inline script, and is
+/* Boot curtain, the class is only ever added by an inline script, and is
    released by boot.js or its own failsafe timeout. With JS off it never
    applies, so content is never hidden behind scripts that did not run. */
 .is-booting .shell, .is-booting .footer { opacity: 0; }

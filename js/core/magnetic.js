@@ -1,12 +1,12 @@
 /* ==========================================================================
-   magnetic.js — magnetic attraction for primary interactive elements.
+   magnetic.js, magnetic attraction for primary interactive elements.
 
    Any element with [data-magnetic] drifts toward the pointer once it enters a
    radius around it, and springs back when the pointer leaves. Strength and
    radius are per-element via data-magnetic="0.4" and data-magnetic-radius.
 
    Disabled entirely for coarse pointers and reduced motion. Nothing here is
-   required to operate the element — it is decoration on top of a real button.
+   required to operate the element, it is decoration on top of a real button.
    ========================================================================== */
 window.GEO = window.GEO || {};
 

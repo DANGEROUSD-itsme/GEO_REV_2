@@ -1,5 +1,5 @@
 /* ==========================================================================
-   home.js — the overview page.
+   home.js, the overview page.
 
    Renders the saved-progress strip, the mark-allocation bars and the T.E.E.T
    legend from data. The rest of the page is authored HTML so it reads fine
@@ -13,6 +13,7 @@ GEO.pages.home = (function () {
   function tile(label, value, sub, pct, tone) {
     var el = document.createElement('div');
     el.className = 'card reveal reveal--up';
+    el.setAttribute('data-tilt', '4');
     el.innerHTML =
       '<p class="eyebrow">' + label + '</p>' +
       '<p class="stat__value">' + value + '</p>' +
@@ -72,7 +73,7 @@ GEO.pages.home = (function () {
         '</div>';
     }).join('');
 
-    /* Bars grow when the block scrolls in — or immediately without GSAP. */
+    /* Bars grow when the block scrolls in, or immediately without GSAP. */
     var fills = host.querySelectorAll('.meter__fill');
     function grow() { fills.forEach(function (f) { f.style.width = f.getAttribute('data-w') + '%'; }); }
 
@@ -101,8 +102,28 @@ GEO.pages.home = (function () {
     }).join('');
   }
 
+  function renderTicker() {
+    var host = document.getElementById('ticker-track');
+    if (!host) return;
+    var items = [
+      ['50 million', 'arrivals in Paris each year'],
+      ['€24 billion', 'tourist revenue, 2025'],
+      ['290,000', 'jobs in the Paris region'],
+      ['75,000', 'short-term rentals'],
+      ['90%', 'of world trade goes by sea'],
+      ['$18 trillion', 'carried on those ships'],
+      ['300+', 'components in one phone'],
+      ['21 countries', 'in one Toyota'],
+      ['37 marks', 'in 45 minutes']
+    ];
+    host.innerHTML = items.map(function (it) {
+      return '<span class="marquee__item"><i aria-hidden="true"></i>' + it[0] + ' <b>' + it[1] + '</b></span>';
+    }).join('');
+  }
+
   return {
     init: function () {
+      renderTicker();
       renderProgress();
       renderMarks();
       renderTeetLegend();

@@ -1,9 +1,9 @@
 /* ==========================================================================
-   store.js — revision progress, persisted across pages.
+   store.js: revision progress, persisted across pages.
 
    This is a multi-page site, so progress has to survive navigation. It is
    written to localStorage under one namespaced key, with an in-memory
-   fallback for private windows or blocked storage — every read and write is
+   fallback for private windows or blocked storage: every read and write is
    wrapped, and the app behaves correctly when nothing can be saved.
    ========================================================================== */
 window.GEO = window.GEO || {};
@@ -67,7 +67,7 @@ GEO.store = (function () {
     available: available,
     get: function () { return state; },
 
-    /* mutate(fn) — run a mutation, persist, then notify subscribers. */
+    /* mutate(fn), run a mutation, persist, then notify subscribers. */
     mutate: function (fn) {
       fn(state);
       persist();

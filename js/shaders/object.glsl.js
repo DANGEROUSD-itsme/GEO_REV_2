@@ -1,5 +1,5 @@
 /* ==========================================================================
-   object.glsl.js — shaders for the 3D objects that sit in real space.
+   object.glsl.js, shaders for the 3D objects that sit in real space.
 
    1. `displaced`  A noise-displaced sphere (the hero "world"): vertex noise
                    pushes the surface along its normal; the fragment shader

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   components.css — reusable UI pieces shared across pages.
+   components.css, reusable UI pieces shared across pages.
    Buttons, cards, chips, accordions, tables, meters, form controls, flip card.
    ========================================================================== */
 
@@ -106,7 +106,7 @@
 .list--neg li::before { background: var(--neg); }
 .definition { border-left: 1px solid var(--accent-line); padding-left: var(--s-3); }
 
-/* Positive / negative block — never colour alone: each carries a +/− glyph. */
+/* Positive / negative block, never colour alone: each carries a +/− glyph. */
 .pn { border-radius: var(--r-m); padding: var(--s-3); border: 1px solid; }
 .pn--pos { border-color: rgba(53,210,154,0.28); background: var(--pos-soft); }
 .pn--neg { border-color: rgba(255,95,126,0.28); background: var(--neg-soft); }
@@ -185,3 +185,77 @@
   transform: scaleX(0); transform-origin: left; background: var(--accent);
   pointer-events: none;
 }
+
+/* ==========================================================================
+   Micro-interaction layer (driven by js/core/interact.js)
+   ========================================================================== */
+
+/* ---- click ripple ---- */
+.ripple {
+  position: absolute; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, rgba(123,108,255,0.55), rgba(123,108,255,0) 62%);
+  transform: scale(0); opacity: 0.9;
+  animation: ripple-out 640ms var(--e-out) forwards;
+  z-index: 0;
+}
+@keyframes ripple-out { to { transform: scale(1); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .ripple { display: none; } }
+
+/* ---- pointer-following glow ---- */
+.has-glow { position: relative; }
+.has-glow::before {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(340px circle at var(--mx, 50%) var(--my, 50%),
+              rgba(123,108,255,0.16), transparent 62%);
+  opacity: 0; transition: opacity var(--t-mid) var(--e-out);
+  z-index: 0;
+}
+.has-glow:hover::before { opacity: 1; }
+.card > *, .tool > *, .deck > *, .qpick > * { position: relative; z-index: 1; }
+@media (prefers-reduced-motion: reduce) { .has-glow::before { display: none; } }
+
+/* ---- tilt hosts keep their children in the same 3D space ---- */
+[data-tilt] { transform-style: preserve-3d; will-change: transform; }
+
+/* ---- marquee ---- */
+.marquee {
+  display: flex; overflow: hidden; width: 100%;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee__track { display: flex; flex: none; align-items: center; gap: var(--s-5); padding-right: var(--s-5); }
+.marquee__item {
+  display: inline-flex; align-items: baseline; gap: 0.6rem; white-space: nowrap;
+  font-family: var(--font-display); font-size: var(--step-2); color: var(--text-dim);
+}
+.marquee__item b { color: var(--text); font-family: var(--font-sans); font-weight: 600; font-size: var(--step-0); }
+.marquee__item i { display: block; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+
+/* ---- scramble keeps its box while letters shuffle ---- */
+[data-scramble] { font-variant-numeric: tabular-nums; }
+
+/* ---- richer hover states across the board ---- */
+.btn { overflow: hidden; }
+.btn--primary { box-shadow: 0 0 0 0 rgba(123,108,255,0.5); }
+.btn--primary:hover { box-shadow: 0 10px 40px -12px rgba(123,108,255,0.9); }
+.card { transition: border-color var(--t-mid) var(--e-out), transform var(--t-mid) var(--e-out),
+                    box-shadow var(--t-mid) var(--e-out), background-color var(--t-mid) var(--e-out); }
+.tool:hover, .deck:hover, .qpick:hover { box-shadow: 0 18px 60px -30px rgba(123,108,255,0.8); }
+.node { transition: border-color var(--t-fast) var(--e-out), background-color var(--t-fast) var(--e-out),
+                    transform var(--t-fast) var(--e-out), box-shadow var(--t-fast) var(--e-out); }
+.node:hover { box-shadow: 0 14px 40px -26px rgba(123,108,255,0.9); }
+.node.is-open { box-shadow: 0 0 0 1px rgba(123,108,255,0.25) inset; }
+
+/* ---- animated underline for the contents rail ---- */
+.toc a { position: relative; }
+.toc a::after {
+  content: ''; position: absolute; left: 0; bottom: 0.15rem; width: 0; height: 1px;
+  background: var(--accent); transition: width var(--t-mid) var(--e-out);
+}
+.toc a:hover::after { width: 1.4rem; }
+
+/* ---- section rules that draw themselves in ---- */
+.rule-draw { transform: scaleX(0); transform-origin: left; }
+
+/* ---- the flip card leans toward the pointer as well as flipping ---- */
+.flip { will-change: transform; }

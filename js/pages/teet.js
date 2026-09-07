@@ -1,5 +1,5 @@
 /* ==========================================================================
-   teet.js — the T.E.E.T paragraph builder.
+   teet.js, the T.E.E.T paragraph builder.
 
    A four-field guided writer with per-field model phrases, live counts,
    validation before compiling, and copy / download of the finished paragraph.
@@ -14,7 +14,7 @@ GEO.pages.teet = (function () {
   var BOXES = [
     { k: 't',  tag: 'T', label: 'Topic Sentence', help: 'State your main point clearly.' },
     { k: 'e1', tag: 'E', label: 'Explanation',    help: 'Explain how or why this occurs.' },
-    { k: 'e2', tag: 'E', label: 'Example',        help: 'Give a specific, concrete example — Paris €24B, 75k Airbnbs, Toyota car parts.' },
+    { k: 'e2', tag: 'E', label: 'Example',        help: 'Give a specific, concrete example, Paris €24B, 75k Airbnbs, Toyota car parts.' },
     { k: 't2', tag: 'T', label: 'Tie-Back',       help: 'Connect your argument back to the question.' }
   ];
 
@@ -32,6 +32,15 @@ GEO.pages.teet = (function () {
     });
   }
   function words(s) { return (s.trim().match(/\S+/g) || []).length; }
+
+  /* The four blocks in the scene are this paragraph: each one charges as its
+     box fills, so the 3D object is a live picture of the writing. */
+  function chargeScene() {
+    var d = draft();
+    BOXES.forEach(function (b, i) {
+      GEO.scene.charge(i, Math.min(1, words(d[b.k] || '') / 14));
+    });
+  }
 
   /* ------------------------------------------------------ question picker */
   function renderQuestions() {
@@ -54,7 +63,7 @@ GEO.pages.teet = (function () {
     host.innerHTML = BOXES.map(function (b) {
       var v = d[b.k] || '';
       var h = q.hints[b.k];
-      return '<div class="card teet-box" data-k="' + b.k + '">' +
+      return '<div class="card teet-box" data-k="' + b.k + '" data-tilt="3">' +
         '<div class="field__label">' +
           '<span class="teet-box__tag">' + b.tag + '</span>' +
           '<h2 class="h3">' + b.label + '</h2>' +
@@ -73,6 +82,7 @@ GEO.pages.teet = (function () {
     }).join('');
 
     GEO.magnetic.refresh();
+    GEO.interact.refresh();
   }
 
   function hintBlock(h) {
@@ -112,11 +122,14 @@ GEO.pages.teet = (function () {
       return;
     }
 
-    /* Joined into one flowing paragraph — sentence-final punctuation added
+    /* Joined into one flowing paragraph, sentence-final punctuation added
        where the writer left it off, then a single space between parts. */
     var text = BOXES.map(function (b) { return tidy(d[b.k]); }).join(' ');
     GEO.store.mutate(function (s) { s.teet[qid].compiled = text; });
-    GEO.scene.pulse(0.55);
+    /* A finished paragraph lights every block and fires a shockwave. */
+    GEO.scene.setProgress(1);
+    GEO.scene.pulse(0.9);
+    GEO.scene.shock('pos');
 
     out.innerHTML = '<div class="card card--pad teet-out">' +
       '<div class="field__label" style="margin-bottom:.9rem">' +
@@ -130,7 +143,7 @@ GEO.pages.teet = (function () {
       '<p class="field__count" style="margin-top:.8rem">' + words(text) + ' words · ' + text.length + ' characters</p>' +
       '</div>';
 
-    /* textContent, never innerHTML — this is the student's own writing. */
+    /* textContent, never innerHTML, this is the student's own writing. */
     document.getElementById('teet-preview').textContent = text;
 
     renderQuestions();
@@ -159,6 +172,7 @@ GEO.pages.teet = (function () {
 
       renderQuestions();
       renderBoxes();
+      chargeScene();
 
       document.getElementById('teet-questions').addEventListener('click', function (e) {
         var b = e.target.closest('[data-q]');
@@ -168,6 +182,7 @@ GEO.pages.teet = (function () {
         document.getElementById('teet-out').innerHTML = '';
         renderQuestions();
         renderBoxes();
+        chargeScene();
       });
 
       var grid = document.getElementById('teet-grid');
@@ -190,6 +205,7 @@ GEO.pages.teet = (function () {
 
         GEO.store.mutate(function (s) { s.teet[qid][k] = v; });
         document.getElementById('count-' + k).textContent = words(v) + ' words · ' + v.length + ' chars';
+        chargeScene();
 
         if (v.trim()) {
           var box = t.closest('.teet-box');
@@ -206,6 +222,7 @@ GEO.pages.teet = (function () {
         document.getElementById('teet-out').innerHTML = '';
         renderQuestions();
         renderBoxes();
+        chargeScene();
       });
 
       document.getElementById('teet-out').addEventListener('click', function (e) {
@@ -216,10 +233,10 @@ GEO.pages.teet = (function () {
           if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(text).then(
               function () { msg.textContent = 'Copied.'; },
-              function () { msg.textContent = 'Copy blocked — select the text and copy manually.'; }
+              function () { msg.textContent = 'Copy blocked, select the text and copy manually.'; }
             );
           } else {
-            msg.textContent = 'Copy blocked — select the text and copy manually.';
+            msg.textContent = 'Copy blocked, select the text and copy manually.';
           }
         }
       });

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mock Test — Interconnections &amp; Global Tourism</title>
+<title>Mock Test: Interconnections &amp; Global Tourism</title>
 <meta name="description" content="The full 37-mark mock paper on a 45-minute timer: 12 marked multiple-choice questions, three short answers with rubrics, and an extended response with a worked exemplar.">
 <meta name="theme-color" content="#05070c">
 
@@ -21,7 +21,7 @@
 </script>
 </head>
 
-<body data-page="test">
+<body data-page="test" data-scene="rings" class="has-object">
 <a class="skip-link" href="#main">Skip to content</a>
 
 <div class="backdrop" aria-hidden="true"></div>
@@ -47,9 +47,9 @@
 <main id="main" class="shell">
   <section class="section" style="padding-top:9rem" data-scene-mix="0.4">
     <div class="wrap">
-      <p class="eyebrow eyebrow--accent">04 — Mock Test</p>
+      <p class="eyebrow eyebrow--accent">04, Mock Test</p>
       <h1 class="h1" data-split style="margin-block:.6rem 1.2rem">Forty-five minutes on the clock</h1>
-      <p class="lede">Thirty-seven marks across three parts. Part A marks itself as you go; Parts B and C are self-marked against the rubrics and the worked exemplar.</p>
+      <p class="lede" data-words>Thirty-seven marks across three parts. Part A marks itself as you go; Parts B and C are self-marked against the rubrics and the worked exemplar.</p>
       <noscript><p class="noscript-note" style="margin-top:2rem"><b>JavaScript is turned off.</b> This is an interactive tool and needs JavaScript to run. The <a href="notes.html">study notes</a> hold the same content in reading form.</p></noscript>
     </div>
   </section>
@@ -79,18 +79,21 @@
 <script src="js/shaders/noise.glsl.js" defer></script>
 <script src="js/shaders/background.glsl.js" defer></script>
 <script src="js/shaders/object.glsl.js" defer></script>
+<script src="js/shaders/globe.glsl.js" defer></script>
 <script src="js/shaders/transition.glsl.js" defer></script>
+<!-- Data: parsed before the core, which builds from it -->
+<script src="js/data/curriculum.js" defer></script>
+<script src="js/data/test.js" defer></script>
 <script src="js/core/env.js" defer></script>
 <script src="js/core/store.js" defer></script>
 <script src="js/core/scene.js" defer></script>
 <script src="js/core/transition.js" defer></script>
 <script src="js/core/cursor.js" defer></script>
 <script src="js/core/magnetic.js" defer></script>
+<script src="js/core/interact.js" defer></script>
 <script src="js/core/reveal.js" defer></script>
 <script src="js/core/counters.js" defer></script>
 <script src="js/core/nav.js" defer></script>
-<script src="js/data/curriculum.js" defer></script>
-<script src="js/data/test.js" defer></script>
 <script src="js/pages/test.js" defer></script>
 <script src="js/core/boot.js" defer></script>
 </body>

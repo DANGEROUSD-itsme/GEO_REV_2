@@ -1,5 +1,5 @@
 /* ==========================================================================
-   pages.css — layout for the five pages.
+   pages.css, layout for the five pages.
    Editorial and asymmetric where it serves hierarchy; the underlying grid
    stays calm so the motion on top reads as expensive rather than busy.
    ========================================================================== */
@@ -12,7 +12,7 @@
   position: relative;
 }
 /* `ch` on the title is measured in the DISPLAY font at display size, which is
-   what we actually want to constrain — measuring it on the wrapper would use
+   what we actually want to constrain, measuring it on the wrapper would use
    the body font and clamp the heading to a fraction of its true width. */
 .hero__inner { max-width: min(100%, 62rem); }
 .hero__title { margin-block: var(--s-3) var(--s-4); max-width: 13ch; }
@@ -276,3 +276,21 @@
 .step-dot[aria-current="step"] { border-color: var(--accent-line); background: var(--accent-soft); color: var(--text); }
 .step-dot.is-done { color: var(--pos); border-color: rgba(53,210,154,0.35); }
 .step-dot i { font-family: var(--font-mono); font-size: 0.66rem; font-style: normal; }
+
+/* ==========================================================================
+   Space reserved for the 3D object beside the content on wide screens, so
+   the globe, the blocks and the rings are never hidden behind body copy.
+   ========================================================================== */
+@media (min-width: 1180px) {
+  .has-object .wrap { width: min(100% - 2.5rem, var(--maxw)); }
+  .has-object .module--object,
+  .has-object .object-room { max-width: 60%; }
+  .supply-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1500px) {
+  .has-object .module--object,
+  .has-object .object-room { max-width: 62%; }
+}
+
+/* the marquee strip on the overview page */
+.ticker { border-block: 1px solid var(--line); padding-block: var(--s-3); }

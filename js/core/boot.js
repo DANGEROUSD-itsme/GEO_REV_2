@@ -1,5 +1,5 @@
 /* ==========================================================================
-   boot.js — startup order for every page.
+   boot.js, startup order for every page.
 
    Page modules register themselves as GEO.pages[<name>] and are initialised
    BEFORE the reveal pass, so anything they inject is picked up by
@@ -22,7 +22,7 @@ GEO.pages = GEO.pages || {};
     if (page && typeof page.init === 'function') {
       try { page.init(); }
       catch (e) {
-        /* A broken page module must not take the whole site with it — the
+        /* A broken page module must not take the whole site with it, the
            static HTML underneath stays readable. */
         if (window.console) console.error('[geo] page module "' + name + '" failed:', e);
       }
@@ -33,6 +33,7 @@ GEO.pages = GEO.pages || {};
     GEO.counters.init();
     GEO.cursor.init();
     GEO.magnetic.init();
+    GEO.interact.init();
     if (GEO.scene && GEO.scene.bindSections) GEO.scene.bindSections();
 
     /* 5. Anything that measures layout needs one refresh once webfonts land. */

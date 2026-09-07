@@ -1,5 +1,5 @@
 /* ==========================================================================
-   background.glsl.js — the persistent atmospheric field behind every page.
+   background.glsl.js, the persistent atmospheric field behind every page.
 
    Driven continuously by scroll POSITION and scroll VELOCITY, plus a lazy
    pointer offset, so the backdrop behaves like one physical system across the
@@ -14,6 +14,8 @@
      uMix        0..1 palette blend, cross-faded per section by scene.js
      uColorA/B/C base, mid and accent colours
      uIntensity  global dimmer (drops on low-power tiers)
+     uShock      1..0 expanding ring fired by the UI on a meaningful event
+     uShockColor colour of that ring (green for right, red for wrong)
    ========================================================================== */
 window.GEO = window.GEO || {};
 GEO.shaders = GEO.shaders || {};
@@ -39,6 +41,8 @@ GEO.shaders.background = {
     uniform vec3  uColorB;
     uniform vec3  uColorC;
     uniform float uIntensity;
+    uniform float uShock;
+    uniform vec3  uShockColor;
 
     void main() {
       vec2 uv = vUv;
@@ -51,7 +55,7 @@ GEO.shaders.background = {
       q += uMouse * 0.10;
       q.y -= uScroll * 1.15;
 
-      /* Scroll velocity stretches the field vertically — fast scrolling
+      /* Scroll velocity stretches the field vertically: fast scrolling
          smears the noise, slow scrolling lets it settle. */
       q.y *= 1.0 + abs(uVelocity) * 0.35;
 
@@ -70,6 +74,14 @@ GEO.shaders.background = {
       /* A faint horizon band that travels as the document scrolls. */
       float band = exp(-pow((uv.y - (0.78 - uScroll * 0.62)) * 6.5, 2.0));
       col += uColorC * band * 0.11;
+
+      /* A shockwave the interface can fire: a ring that expands out of the
+         centre and fades, so the backdrop reacts to what the student does. */
+      if (uShock > 0.001) {
+        float sr = (1.0 - uShock) * 1.5;
+        float ring = exp(-pow((d - sr) * 7.5, 2.0));
+        col += uShockColor * ring * uShock * 0.55;
+      }
 
       /* Very low-amplitude dither to stop banding in the dark gradients. */
       float dither = fract(sin(dot(uv * 1024.0, vec2(12.9898, 78.233))) * 43758.5453) - 0.5;

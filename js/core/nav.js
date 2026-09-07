@@ -1,5 +1,5 @@
 /* ==========================================================================
-   nav.js — header behaviour and navigation routing.
+   nav.js, header behaviour and navigation routing.
 
    Marks the current page, handles the mobile menu, and routes internal link
    clicks through the shader transition. Direction of travel is derived from
