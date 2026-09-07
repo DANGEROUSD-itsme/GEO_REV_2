@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T.E.E.T Builder — Interconnections &amp; Global Tourism</title>
+<meta name="description" content="Build exam paragraphs with the Topic, Explanation, Example, Tie-back model, with model phrases for all three likely questions.">
+<meta name="theme-color" content="#05070c">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/pages.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%237b6cff' stroke-width='2'/%3E%3Cellipse cx='16' cy='16' rx='6' ry='13' fill='none' stroke='%237b6cff' stroke-width='1.4'/%3E%3Cpath d='M3 16h26' stroke='%237b6cff' stroke-width='1.4'/%3E%3C/svg%3E">
+
+<script>
+  document.documentElement.classList.add('is-booting');
+  setTimeout(function () { document.documentElement.classList.remove('is-booting'); }, 1600);
+</script>
+</head>
+
+<body data-page="teet">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="backdrop" aria-hidden="true"></div>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<canvas id="fx-canvas" aria-hidden="true"></canvas>
+<div class="overlay-fx" aria-hidden="true"><div class="grain"></div></div>
+<div class="scroll-bar" aria-hidden="true"></div>
+
+<header class="nav">
+  <div class="nav__inner">
+    <a class="nav__brand" href="index.html"><b>Interconnections</b> <span>&amp; Global Tourism</span></a>
+    <button class="nav__toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"><span></span></button>
+    <nav class="nav__links" id="nav-links" aria-label="Primary">
+      <a class="nav__link" href="index.html">Overview</a>
+      <a class="nav__link" href="notes.html">Study Notes</a>
+      <a class="nav__link" href="flashcards.html">Flashcards</a>
+      <a class="nav__link" href="teet.html">TEET Builder</a>
+      <a class="nav__link" href="test.html">Mock Test</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="shell">
+  <section class="section" style="padding-top:9rem" data-scene-mix="0.35">
+    <div class="wrap">
+      <p class="eyebrow eyebrow--accent">03 — TEET Builder</p>
+      <h1 class="h1" data-split style="margin-block:.6rem 1.2rem">Build the paragraph</h1>
+      <p class="lede">One box at a time: Topic sentence, Explanation, Example, Tie-back. Open the model phrases if you stall, then compile, copy or download the finished paragraph.</p>
+      <noscript><p class="noscript-note" style="margin-top:2rem"><b>JavaScript is turned off.</b> This is an interactive tool and needs JavaScript to run. The <a href="notes.html">study notes</a> hold the same content in reading form.</p></noscript>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0" data-scene-mix="0.65">
+    <div class="wrap">
+      <div class="teet-questions" id="teet-questions" data-stagger><!-- built by teet.js --></div>
+      <div class="teet-grid" id="teet-grid" style="margin-top:1.6rem"><!-- built by teet.js --></div>
+      <div class="card-actions" style="margin-top:1.4rem">
+        <button class="btn btn--primary" id="teet-compile" data-magnetic="0.35">Compile paragraph</button>
+        <button class="btn btn--sm btn--ghost" id="teet-clear">Clear boxes</button>
+      </div>
+      <div id="teet-out" style="margin-top:1.2rem" aria-live="polite"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__grid">
+    <p>Year 10 Geography · Geographies of Interconnections &amp; Global Tourism</p>
+    <nav class="footer__links" aria-label="Footer">
+      <a href="index.html">Overview</a>
+      <a href="flashcards.html">Flashcards</a>
+      <a href="teet.html">TEET</a>
+      <a href="test.html">Mock test</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/three@0.157.0/build/three.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<script src="js/shaders/noise.glsl.js" defer></script>
+<script src="js/shaders/background.glsl.js" defer></script>
+<script src="js/shaders/object.glsl.js" defer></script>
+<script src="js/shaders/transition.glsl.js" defer></script>
+<script src="js/core/env.js" defer></script>
+<script src="js/core/store.js" defer></script>
+<script src="js/core/scene.js" defer></script>
+<script src="js/core/transition.js" defer></script>
+<script src="js/core/cursor.js" defer></script>
+<script src="js/core/magnetic.js" defer></script>
+<script src="js/core/reveal.js" defer></script>
+<script src="js/core/counters.js" defer></script>
+<script src="js/core/nav.js" defer></script>
+<script src="js/data/teet.js" defer></script>
+<script src="js/pages/teet.js" defer></script>
+<script src="js/core/boot.js" defer></script>
+</body>
+</html>
