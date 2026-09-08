@@ -39,9 +39,24 @@ GEO.env = (function () {
     return 'high';
   }
 
+  /* Motion preference: 'auto' follows the operating system, but the visitor
+     can force it on or off from the nav. Someone with Reduce Motion enabled
+     system-wide would otherwise get a completely static site with no way to
+     ask for the animation, which is the single most common reason this looks
+     "rigid" on a phone. */
+  var motionPref = 'auto';
+  try { motionPref = localStorage.getItem('geo:motion') || 'auto'; } catch (e) {}
+
+  function computeReduced() {
+    if (motionPref === 'off') return true;
+    if (motionPref === 'on') return false;
+    return mqMotion.matches;
+  }
+
   var env = {
     webgl: detectWebGL(),
-    reducedMotion: mqMotion.matches,
+    motionPref: motionPref,
+    reducedMotion: computeReduced(),
     coarse: mqCoarse.matches,
     tier: detectTier(),
     hidden: document.hidden,
@@ -69,13 +84,26 @@ GEO.env = (function () {
     if (mq.addEventListener) mq.addEventListener('change', handler);
     else if (mq.addListener) mq.addListener(handler);   // Safari < 14
   }
-  bindMQ(mqMotion, function (e) {
-    env.reducedMotion = e.matches;
-    document.documentElement.classList.toggle('reduced-motion', e.matches);
-    emit('motionchange', e.matches);
-  });
+  function applyMotion() {
+    env.reducedMotion = computeReduced();
+    env.motionPref = motionPref;
+    document.documentElement.classList.toggle('reduced-motion', env.reducedMotion);
+    /* CSS needs to know when motion was forced ON, so the reduced-motion
+       media query stops flattening every transition. */
+    document.documentElement.classList.toggle('force-motion', motionPref === 'on');
+    emit('motionchange', env.reducedMotion);
+  }
+
+  env.setMotion = function (pref) {
+    motionPref = pref;
+    try { localStorage.setItem('geo:motion', pref); } catch (e) {}
+    applyMotion();
+  };
+  env.toggleMotion = function () { env.setMotion(env.reducedMotion ? 'on' : 'off'); };
+
+  bindMQ(mqMotion, applyMotion);
   bindMQ(mqCoarse, function (e) { env.coarse = e.matches; emit('pointerchange', e.matches); });
-  document.documentElement.classList.toggle('reduced-motion', env.reducedMotion);
+  applyMotion();
 
   /* ------------------------------------------------------------ visibility
      Rendering is fully paused while the tab is hidden, no wasted GPU. */
@@ -102,10 +130,17 @@ GEO.env = (function () {
   /* ------------------------------------------------------------- pointer */
   var pointer = { x: 0, y: 0, nx: 0, ny: 0, ex: 0, ey: 0 };   // ex/ey are eased
   env.pointer = pointer;
-  window.addEventListener('pointermove', function (e) {
-    pointer.x = e.clientX; pointer.y = e.clientY;
-    pointer.nx = (e.clientX / window.innerWidth) * 2 - 1;
-    pointer.ny = -((e.clientY / window.innerHeight) * 2 - 1);
+  function movePointer(x, y) {
+    pointer.x = x; pointer.y = y;
+    pointer.nx = (x / window.innerWidth) * 2 - 1;
+    pointer.ny = -((y / window.innerHeight) * 2 - 1);
+  }
+  window.addEventListener('pointermove', function (e) { movePointer(e.clientX, e.clientY); }, { passive: true });
+
+  /* A finger dragging across the screen moves the scene too, so the 3D layer
+     is not dead on a phone just because there is no mouse. */
+  window.addEventListener('touchmove', function (e) {
+    if (e.touches && e.touches.length) movePointer(e.touches[0].clientX, e.touches[0].clientY);
   }, { passive: true });
 
   /* ------------------------------------------------- single shared ticker

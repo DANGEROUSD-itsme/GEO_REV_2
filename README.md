@@ -4,7 +4,11 @@ A WebGL-driven revision site for the Year 10 Geography trimester test. Five page
 no build step: open `index.html`, or deploy the folder as-is to GitHub Pages,
 Netlify or Vercel.
 
-> Three.js and GSAP load from a CDN, so the first load needs an internet connection.
+> **No CDN, no network needed.** Three.js, GSAP, ScrollTrigger and Lenis are
+> vendored in `/vendor`, so a blocked CDN (school wifi, an ad blocker, patchy
+> mobile data) can never flatten the site into a static page. The only external
+> request is an optional Google Font, loaded non-blocking; the page is designed
+> to look right without it.
 
 ## Pages
 
@@ -43,6 +47,8 @@ js/
     home.js  notes.js  flashcards.js  teet.js  test.js
 standalone/
   geo-revision.html  the original single-file version, works offline-ish in one file
+vendor/
+  three.min.js  gsap.min.js  ScrollTrigger.min.js  lenis.min.js
 ```
 
 Everything is a classic script on a `GEO` namespace: no modules, so the site
@@ -79,6 +85,11 @@ throws 3D confetti from the button you clicked; a wrong one sends a red wave.
   text via `data-cursor-text`.
 - **Magnetism**: `[data-magnetic="0.4"]` on a button makes it drift toward the
   cursor within a radius and spring back.
+- **Inertial scrolling** (`js/core/smooth.js`, on Lenis): the page glides and
+  settles instead of snapping a line at a time, and ScrollTrigger updates from
+  the eased position so scrubbed animation stays locked to the content. It
+  scrolls the real document, so sticky elements, the scrollbar and anchor links
+  all still behave. Off for touch, where the OS momentum is better.
 - **Reveals**: headings are split into *measured lines*, each clipped and slid
   up; ledes light up word by word on a scrub; blocks stagger in; rules draw
   themselves; stats count up on entry.
@@ -88,6 +99,18 @@ throws 3D confetti from the button you clicked; a wrong one sends a red wave.
   highlight that follows the pointer inside them, a ripple from the exact click
   point, letters that scramble and settle, a group skew tied to scroll velocity,
   and a ticker whose speed follows the scroll.
+
+## If it ever looks static
+
+There is a **Motion** switch in the nav. The site respects the operating
+system's "reduce motion" setting by default, which on a phone with that
+accessibility option enabled means a deliberately still page. The switch
+overrides it in either direction and the choice is remembered.
+
+Add `?debug` to any URL for a diagnostics panel reporting whether Three.js,
+GSAP, ScrollTrigger, WebGL, the scene and storage are all live, plus the
+detected performance tier. That is the fastest way to see what a specific
+device is actually doing.
 
 ## Degradation (all of this is tested)
 
@@ -99,7 +122,8 @@ throws 3D confetti from the button you clicked; a wrong one sends a red wave.
   magnetism switch off, scene drift and rotation stop, counters show their final
   values, and wipes become cuts. Changing the setting is picked up live.
 - **Touch / coarse pointer**: the custom cursor and magnetism never activate
-  and the native cursor is untouched.
+  and the native cursor is untouched, but a finger dragging the screen still
+  drives the 3D scene, so the page is not dead without a mouse.
 - **Low-power devices**: particle count, sphere resolution, antialiasing and
   device pixel ratio all scale down by tier; rendering pauses entirely when the
   tab is hidden.
@@ -119,3 +143,7 @@ pointing at the reading-form notes.
 All curriculum content lives in `js/data/`. The pages render from it and hold no
 copy of their own, so a fact is corrected in exactly one place and the notes,
 flashcards and mock test can never drift apart.
+
+---
+
+Made by [studiosdpe.com](https://studiosdpe.com)
