@@ -336,11 +336,15 @@ body.cursor-active input, body.cursor-active textarea, body.cursor-active select
 }
 
 /* ==========================================================================
-   Motion switch, credit, and the forced-motion escape hatch.
-   ========================================================================== */
+   Motion is on by default on every device.
 
-/* When the visitor explicitly asks for motion, the reduced-motion media query
-   above must stop flattening everything. This block restores real durations. */
+   The site does not consult the operating system's "reduce motion" setting
+   unless the visitor explicitly asks for the still version with ?static,
+   because honouring it silently left phones with that accessibility option
+   enabled looking like a dead page. `.force-motion` is therefore present on
+   <html> almost always, and it has to undo the blanket reduced-motion rule
+   further up this file.
+   ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
   .force-motion *, .force-motion *::before, .force-motion *::after {
     animation-duration: revert !important;
@@ -348,42 +352,8 @@ body.cursor-active input, body.cursor-active textarea, body.cursor-active select
     transition-duration: revert !important;
   }
   .force-motion .grain { animation: grain-shift 6s steps(8) infinite; }
-  .force-motion html { scroll-behavior: smooth; }
-
-/* Lenis (js/core/smooth.js). These are the library's own required rules: the
-   `scroll-behavior: auto` override is essential, since the browser's built-in
-   smoothing would otherwise re-animate every frame Lenis sets and the page
-   would barely move. */
-html.lenis, html.lenis body { height: auto; }
-.lenis.lenis-smooth { scroll-behavior: auto !important; }
-.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-.lenis.lenis-stopped { overflow: clip; }
-.lenis.lenis-smooth iframe { pointer-events: none; }
 }
 
-.motion-toggle {
-  display: inline-flex; align-items: center; gap: 0.45rem; margin-left: auto;
-  padding: 0.4rem 0.75rem; border-radius: 100px; border: 1px solid var(--line);
-  font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--text-faint); font-weight: 600;
-  transition: color var(--t-fast) var(--e-out), border-color var(--t-fast) var(--e-out);
-}
-.motion-toggle:hover { color: var(--text); border-color: var(--accent-line); }
-.motion-toggle__dot {
-  width: 7px; height: 7px; border-radius: 50%; background: var(--text-faint);
-  transition: background-color var(--t-fast) var(--e-out), box-shadow var(--t-fast) var(--e-out);
-}
-.motion-toggle.is-on { color: var(--text); border-color: var(--accent-line); }
-.motion-toggle.is-on .motion-toggle__dot { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
-@media (max-width: 820px) {
-  .motion-toggle { margin-left: auto; margin-right: 0.5rem; }
-  .motion-toggle__label { display: none; }
-  .motion-toggle { padding: 0.5rem; }
-}
-
-/* nav links keep their own spacing now that the switch owns the auto margin */
-.nav__links { margin-left: 0; }
-@media (min-width: 821px) { .motion-toggle { order: 2; margin-left: 0.5rem; } .nav__links { margin-left: auto; } }
 
 .footer__made { margin-top: var(--s-4); padding-top: var(--s-3); border-top: 1px solid var(--line); }
 .footer__made a {

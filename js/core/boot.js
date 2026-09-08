@@ -38,9 +38,8 @@ GEO.pages = GEO.pages || {};
     wireAnchors();
     if (GEO.scene && GEO.scene.bindSections) GEO.scene.bindSections();
 
-    /* 5. The motion switch, and a diagnostics panel behind ?debug so a
-          problem on someone else's device can be read off the screen. */
-    wireMotionToggle();
+    /* 5. Diagnostics behind ?debug, so a problem on someone else's device
+          can be read straight off the screen. */
     if (/[?&]debug/.test(location.search)) showDiagnostics();
 
     /* 6. Anything that measures layout needs one refresh once webfonts land. */
@@ -66,20 +65,6 @@ GEO.pages = GEO.pages || {};
       node.setAttribute('tabindex', '-1');
       node.focus({ preventScroll: true });
     });
-  }
-
-  function wireMotionToggle() {
-    var btn = document.querySelector('[data-motion-toggle]');
-    if (!btn) return;
-    function paint() {
-      var on = !GEO.env.reducedMotion;
-      btn.classList.toggle('is-on', on);
-      btn.setAttribute('aria-pressed', String(on));
-      btn.title = on ? 'Motion is on. Tap to turn it off.' : 'Motion is off. Tap to turn it on.';
-    }
-    btn.addEventListener('click', function () { GEO.env.toggleMotion(); paint(); });
-    GEO.env.on('motionchange', paint);
-    paint();
   }
 
   function showDiagnostics() {

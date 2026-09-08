@@ -100,12 +100,16 @@ throws 3D confetti from the button you clicked; a wrong one sends a red wave.
   point, letters that scramble and settle, a group skew tied to scroll velocity,
   and a ticker whose speed follows the scroll.
 
-## If it ever looks static
+## Motion is on by default
 
-There is a **Motion** switch in the nav. The site respects the operating
-system's "reduce motion" setting by default, which on a phone with that
-accessibility option enabled means a deliberately still page. The switch
-overrides it in either direction and the choice is remembered.
+Every device gets the full thing. The operating system's "reduce motion"
+setting is deliberately **not** consulted, because honouring it silently was
+leaving phones with that accessibility option enabled looking like a dead,
+static page.
+
+The still version is still reachable for anyone who needs it, just not as a
+control in the interface: add `?static` to any URL (`?motion` forces it back
+on), or set `geo:motion` to `off` in the browser's storage.
 
 Add `?debug` to any URL for a diagnostics panel reporting whether Three.js,
 GSAP, ScrollTrigger, WebGL, the scene and storage are all live, plus the
@@ -118,9 +122,10 @@ device is actually doing.
   backdrop carries the page, transitions become plain navigations, and every
   page stays fully readable and navigable.
 - **Context loss**: handled; the canvas fades out to the CSS backdrop.
-- **`prefers-reduced-motion`**: reveals are instant, the custom cursor and
-  magnetism switch off, scene drift and rotation stop, counters show their final
-  values, and wipes become cuts. Changing the setting is picked up live.
+- **The still version** (`?static`): reveals are instant, the custom cursor,
+  magnetism and inertial scrolling switch off, scene drift and rotation stop,
+  counters show their final values, and wipes become cuts. Nothing is hidden
+  and every page stays fully usable.
 - **Touch / coarse pointer**: the custom cursor and magnetism never activate
   and the native cursor is untouched, but a finger dragging the screen still
   drives the 3D scene, so the page is not dead without a mouse.

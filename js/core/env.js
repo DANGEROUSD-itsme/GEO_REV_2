@@ -39,18 +39,22 @@ GEO.env = (function () {
     return 'high';
   }
 
-  /* Motion preference: 'auto' follows the operating system, but the visitor
-     can force it on or off from the nav. Someone with Reduce Motion enabled
-     system-wide would otherwise get a completely static site with no way to
-     ask for the animation, which is the single most common reason this looks
-     "rigid" on a phone. */
-  var motionPref = 'auto';
-  try { motionPref = localStorage.getItem('geo:motion') || 'auto'; } catch (e) {}
+  /* Motion is ON by default on every device. The operating system's
+     "reduce motion" setting is not consulted unless the visitor asks for the
+     still version, because honouring it silently was leaving phones with that
+     accessibility option enabled looking like a dead, static page.
+
+     The still version is still reachable, just not as a control in the UI:
+     add ?static to any URL (or set geo:motion to 'off' in storage). */
+  var motionPref = 'on';
+  try { motionPref = localStorage.getItem('geo:motion') || 'on'; } catch (e) {}
+  if (/[?&]static/.test(location.search)) motionPref = 'off';
+  if (/[?&]motion/.test(location.search)) motionPref = 'on';
 
   function computeReduced() {
     if (motionPref === 'off') return true;
     if (motionPref === 'on') return false;
-    return mqMotion.matches;
+    return mqMotion.matches;      // only reachable via an explicit 'auto'
   }
 
   var env = {
